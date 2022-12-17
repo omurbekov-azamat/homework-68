@@ -11,7 +11,7 @@ const CardTodo: React.FC<Props> = ({todo}) => {
   };
 
   return (
-    <div className='d-flex justify-content-around'>
+    <div className='d-flex justify-content-around mt-2'>
       <h4>{todo.title}</h4>
       <input
         id='condition'

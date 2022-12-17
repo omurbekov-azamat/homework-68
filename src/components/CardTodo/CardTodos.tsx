@@ -1,40 +1,27 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import axiosApi from "../../axiosApi";
+import React,  {useEffect} from 'react';
+import {AppDispatch, RootState} from "../../app/store";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchTodos} from "./Todos";
 import CardTodo from "./CardTodo";
-import {ApiTodosList, GotTodoApi} from "../../types";
+import Spinner from "../Spinner/Spinner";
 
 const CardTodos = () => {
-  const [todo, setTodo] = useState<GotTodoApi[]>([]);
-
-  const fetchTodos = useCallback(async () => {
-    try {
-      const responseTodos = await axiosApi.get<ApiTodosList>('/todos/.json');
-      const todos = responseTodos.data;
-
-      if(!todos) {
-        setTodo([]);
-        return;
-      }
-
-      const newTodos = Object.keys(todos).map(id => ({
-        ...todos[id],
-        id
-      }));
-
-      setTodo(newTodos);
-
-    } finally {
-
-    }
-  }, []);
+  const dispatch: AppDispatch = useDispatch();
+  const todos = useSelector((state: RootState) => state.todos);
 
   useEffect(() => {
-    void fetchTodos();
-  }, [fetchTodos]);
+    dispatch(fetchTodos());
+  }, [dispatch]);
+
+  if (todos.gettingTodos) {
+    return (
+      <Spinner/>
+    )
+  }
 
   return (
     <div>
-      {todo.map((item) => (
+      {todos.todos.map((item) => (
         <CardTodo
           key={item.id}
           todo={item}

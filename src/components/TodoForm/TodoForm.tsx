@@ -1,25 +1,20 @@
-import React, {useState} from 'react';
-import {SendTodo} from "../../types";
-import axiosApi from "../../axiosApi";
+import React from 'react';
+import {useDispatch, useSelector} from "react-redux";
+import {onChangeTitle, onTodoSubmit} from "../CardTodo/CardTodoSlice";
+import {AppDispatch, RootState} from "../../app/store";
+import ButtonSpinner from "../Spinner/ButtonSpinner";
 
 const TodoForm = () => {
-  const [todo, setTodo] = useState<SendTodo>({
-    title: '',
-    status: false,
-  });
+  const dispatch: AppDispatch = useDispatch();
+  const todo = useSelector((state: RootState) => state.todo);
+  console.log(todo.sending);
 
   const onTodoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTodo(prev => ({...prev, title: e.target.value}));
+    dispatch(onChangeTitle(e.target.value));
   };
 
   const onFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      await axiosApi.post('/todos.json', todo)
-    } finally {
-
-    }
+    await dispatch(onTodoSubmit());
   };
 
   return (
@@ -37,7 +32,14 @@ const TodoForm = () => {
             />
           </div>
           <div>
-            <button type='submit'>Save</button>
+            <button
+              type='submit'
+              disabled={todo.sending}
+              className='btn btn-primary'
+            >
+              {todo.sending && <ButtonSpinner/>}
+              Save
+            </button>
           </div>
         </div>
       </div>
