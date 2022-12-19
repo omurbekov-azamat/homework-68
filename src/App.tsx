@@ -1,12 +1,14 @@
 import React from 'react';
 import TodoForm from "./components/TodoForm/TodoForm";
-import CardTodos from "./components/CardTodo/CardTodos";
+import Todos from "./components/Todos/Todos";
 
 function App() {
   return (
     <div className='container'>
-      <TodoForm/>
-      <CardTodos/>
+      <div className='row'>
+        <TodoForm/>
+        <Todos/>
+      </div>
     </div>
   );
 }

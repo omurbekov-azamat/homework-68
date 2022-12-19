@@ -1,25 +1,31 @@
-import React from 'react';
-import {useDispatch, useSelector} from "react-redux";
-import {onChangeTitle, onTodoSubmit} from "../CardTodo/CardTodoSlice";
-import {AppDispatch, RootState} from "../../app/store";
+import React, {useState} from 'react';
 import ButtonSpinner from "../Spinner/ButtonSpinner";
+import {fetchTodos, onTodoSubmit} from "../Todos/todosThunks";
+import {useAppDispatch, useAppSelector} from "../../app/hooks";
 
 const TodoForm = () => {
-  const dispatch: AppDispatch = useDispatch();
-  const todo = useSelector((state: RootState) => state.todo);
-  console.log(todo.sending);
+  const dispatch = useAppDispatch();
+  const loading = useAppSelector((state) => state.todos.sending);
+
+  const [todo, setTodo] = useState({
+    title: '',
+    state: false,
+  });
 
   const onTodoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(onChangeTitle(e.target.value));
+    setTodo(prev => ({...prev, title: e.target.value}));
   };
 
   const onFormSubmit = async (e: React.FormEvent) => {
-    await dispatch(onTodoSubmit());
+    e.preventDefault();
+    await dispatch(onTodoSubmit(todo));
+    await dispatch(fetchTodos());
+    setTodo(prev => ({...prev, title: ''}));
   };
 
   return (
-    <form onSubmit={onFormSubmit}>
-      <div className='mt-5'>
+    <div className='col-6'>
+      <form onSubmit={onFormSubmit}>
         <div className='d-flex'>
           <div>
             <input
@@ -34,16 +40,16 @@ const TodoForm = () => {
           <div>
             <button
               type='submit'
-              disabled={todo.sending}
+              disabled={loading}
               className='btn btn-primary'
             >
-              {todo.sending && <ButtonSpinner/>}
+              {loading && <ButtonSpinner/>}
               Save
             </button>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
 
