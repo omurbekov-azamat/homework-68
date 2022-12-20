@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react';
-import {AppDispatch} from "../../app/store";
 import {useDispatch} from "react-redux";
+import {useAppSelector} from "../../app/hooks";
+import {AppDispatch} from "../../app/store";
 import {fetchTodos} from "./todosThunks";
 import TodoItem from "./TodoItem";
 import Spinner from "../Spinner/Spinner";
-import {useAppSelector} from "../../app/hooks";
 
 const Todos = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -22,7 +22,7 @@ const Todos = () => {
 
   if (todos.todos.length === 0) {
     return (
-      <h4 className='col-6'>There are no todos</h4>
+      <h4 className='col-6 mt-5'>There are no todos</h4>
     )
   } else {
     return (

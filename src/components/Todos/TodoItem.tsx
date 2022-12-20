@@ -1,7 +1,8 @@
 import React from 'react';
 import {GotTodoApi} from "../../types";
-import {useAppDispatch} from "../../app/hooks";
+import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {changeStatus, deleteTodo, fetchTodos} from "./todosThunks";
+import ButtonSpinner from "../Spinner/ButtonSpinner";
 
 interface Props {
   todo: GotTodoApi;
@@ -9,11 +10,15 @@ interface Props {
 
 const TodoItem: React.FC<Props> = ({todo}) => {
   const dispatch = useAppDispatch();
+  const id = useAppSelector((state) => state.todos.id);
 
   const changeCondition = async (e: React.ChangeEvent<HTMLInputElement>) => {
     await dispatch(changeStatus({
-      state: e.target.checked,
-      id: todo.id
+      task: {
+        ...todo,
+        status: e.target.checked,
+      },
+      id: todo.id,
     }));
     await dispatch(fetchTodos());
   };
@@ -34,13 +39,15 @@ const TodoItem: React.FC<Props> = ({todo}) => {
           onChange={changeCondition}
           type="checkbox"
           className='ms-auto'
-          checked={todo.state}
+          checked={todo.status}
         />
         <button
           className='ms-5 btn btn-danger'
           onClick={() => onDeleteTodo(todo.id)}
+          disabled={id === todo.id}
         >
-          delete
+          {id === todo.id && <ButtonSpinner/>}
+          Delete
         </button>
       </div>
   );

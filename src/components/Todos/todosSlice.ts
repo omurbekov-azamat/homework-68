@@ -1,12 +1,19 @@
-import {MainState} from "../../types";
+import {GotTodoApi} from "../../types";
 import {createSlice} from "@reduxjs/toolkit";
 import {deleteTodo, fetchTodos, onTodoSubmit} from "./todosThunks";
+
+interface MainState {
+  todos: GotTodoApi[],
+  gettingTodos: boolean,
+  sending: boolean,
+  id: string,
+}
 
 const initialState: MainState= {
   todos: [],
   gettingTodos: false,
   sending: false,
-  cancel: false,
+  id: '',
 }
 
 export const todosSlice = createSlice({
@@ -27,11 +34,11 @@ export const todosSlice = createSlice({
     builder.addCase(onTodoSubmit.fulfilled, (state) => {
       state.sending = false;
     });
-    builder.addCase(deleteTodo.pending, (state) => {
-      state.cancel = true;
+    builder.addCase(deleteTodo.pending, (state, action) => {
+      state.id = action.meta.arg;
     });
     builder.addCase(deleteTodo.fulfilled, (state) => {
-      state.cancel = false;
+      state.id = '';
     });
   },
 })

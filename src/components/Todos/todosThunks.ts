@@ -13,7 +13,7 @@ export const onTodoSubmit = createAsyncThunk<void, SendTodo> (
 export const fetchTodos = createAsyncThunk<GotTodoApi []>(
   'todos/fetch',
   async () => {
-    const responseTodos = await axiosApi.get<ApiTodosList | null>('/todos/.json');
+    const responseTodos = await axiosApi.get<ApiTodosList | null>('/todos.json');
     const todos = responseTodos.data;
 
     let newTodos: GotTodoApi[] = [];
@@ -40,15 +40,7 @@ export const deleteTodo = createAsyncThunk<void, string> (
 
 export const changeStatus = createAsyncThunk<void , ChangeTodo, {state: RootState}>(
   'todos/status',
-  async (args, thunkApi) => {
-
-    const state = thunkApi.getState().todos.todos;
-    let filtered = state.filter(function (e){return e.id === args.id});
-
-    let fixTodo = {
-      title: filtered[0].title,
-      state: args.state,
-    }
-    await axiosApi.put('todos/' + args.id + '.json', fixTodo);
+  async (args) => {
+    await axiosApi.put('todos/' + args.id + '.json', args.task);
   }
 )

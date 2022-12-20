@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import ButtonSpinner from "../Spinner/ButtonSpinner";
-import {fetchTodos, onTodoSubmit} from "../Todos/todosThunks";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
+import {fetchTodos, onTodoSubmit} from "../Todos/todosThunks";
+import ButtonSpinner from "../Spinner/ButtonSpinner";
 
 const TodoForm = () => {
   const dispatch = useAppDispatch();
@@ -9,7 +9,7 @@ const TodoForm = () => {
 
   const [todo, setTodo] = useState({
     title: '',
-    state: false,
+    status: false,
   });
 
   const onTodoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,9 +24,9 @@ const TodoForm = () => {
   };
 
   return (
-    <div className='col-6'>
+    <div className='col-6 p-5 text-center'>
       <form onSubmit={onFormSubmit}>
-        <div className='d-flex'>
+        <div className='d-flex justify-content-around align-items-center'>
           <div>
             <input
               type="text"
@@ -35,6 +35,7 @@ const TodoForm = () => {
               value={todo.title}
               onChange={onTodoChange}
               required
+              placeholder='todo...'
             />
           </div>
           <div>
@@ -49,6 +50,7 @@ const TodoForm = () => {
           </div>
         </div>
       </form>
+      <h5 className='mt-5'>Add new exercise</h5>
     </div>
   );
 };

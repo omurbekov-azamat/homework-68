@@ -1,6 +1,6 @@
 export interface SendTodo {
   title: string;
-  state: boolean;
+  status: boolean;
 }
 
 export interface GotTodoApi extends SendTodo {
@@ -11,14 +11,7 @@ export interface ApiTodosList {
   [id: string]: SendTodo;
 }
 
-interface MainState {
-  todos: GotTodoApi[],
-  gettingTodos: boolean,
-  sending: boolean,
-  cancel: boolean,
-}
-
 interface ChangeTodo {
   id: string,
-  state: boolean,
+  task: GotTodoApi,
 }
